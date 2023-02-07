@@ -1,0 +1,2 @@
+// db.collection('uni-id-users').add({ username: "wx" })
+db.collection('uni-id-users').add({ wx_openid: { mp: "123" } })

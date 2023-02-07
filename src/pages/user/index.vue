@@ -4,26 +4,31 @@
     <view class="content">
       <view class="title">欢迎登录</view>
       <view class="tips">未注册的微信号验证后自动创建账号</view>
-      <u-button color="#f9db61" text="微信一键登录" :customStyle="{color:'#333'}" @click="sayHello"/>
+      <u-button color="#f9db61" text="微信一键登录" :customStyle="{color:'#333'}" @click="wxLogin"/>
 
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+const uniIdCo = uniCloud.importObject('uni-id-co')
 
 
 
 
 
-const sayHello = ()=> {
-  uniCloud.callFunction({
-    name: 'home',
-    data: {
-      action: 'hello/sayHello',
-      data: {a:1}
-    }
-  }).then(res => {console.log(res)});
+const wxLogin = async ()=> {
+  const {code} = await uni.login();
+  // console.log(code)
+  // uniCloud.callFunction({
+  //   name: 'home',
+  //   data: {
+  //     action: 'user/login/wxlogin',
+  //     data: {code}
+  //   }
+  // }).then(res => {console.log(res)});
+
+  uniIdCo.loginByWeixin({code})
 }
 </script>
 

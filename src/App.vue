@@ -1,21 +1,21 @@
-<script setup lang="ts">
-import {onHide, onLaunch, onShow} from "@dcloudio/uni-app";
-import useSystem from "@/store/system";
+<script>
+import { onHide, onLaunch, onShow } from '@dcloudio/uni-app';
+import useSystem from '@/store/system';
+import uniIdPageInit from '@/uni_modules/uni-id-pages/init.js';
 
 onLaunch(() => {
-  const {getSystem} = useSystem();
+  const { getSystem } = useSystem();
 
-  getSystem()
+  getSystem();
 });
 onShow(() => {
-  console.log("App Show");
+  console.log('App Show');
 });
 onHide(() => {
-  console.log("App Hide");
+  console.log('App Hide');
 });
 </script>
 <style lang="scss">
-@import "node_modules/uview-plus/index.scss";
-@import "styles/public.scss";
+@import 'node_modules/uview-plus/index.scss';
+@import 'styles/public.scss';
 </style>
-
