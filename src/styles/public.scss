@@ -1,0 +1,63 @@
+// 全局样式
+@import "./global.scss";
+@import "./fontSize.scss";
+@import "./layout.scss";
+
+Page {
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 24rpx;
+}
+
+:root{
+  font-size: 24rpx;
+}
+
+text,
+view,
+div,
+span,
+swiper,
+swiper-item,
+scroll-view {
+  box-sizing: border-box;
+  font-size: 24rpx;
+}
+
+
+
+
+// 按钮按下样式
+.q-hover-class {
+  position: relative !important;
+  overflow: hidden !important;
+
+  &::after {
+    content: '';
+    display: block !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10rpx !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+  }
+}
+
+// 按钮按下样式
+.q-hover-class-p {
+  overflow: hidden !important;
+
+  &::after {
+    content: '';
+    display: block !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10rpx !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+  }
+}
