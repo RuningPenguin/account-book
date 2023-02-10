@@ -6,102 +6,131 @@
       "qie-(.*)": "./components/qie-$1/qie-$1.vue"
     }
   },
-  "pages": [{
+  "pages": [
+    {
       "title": "企鹅账本",
       "path": "pages/index/index",
-      "needLogin": false // 当前页面是否需要登录才可以访问，此配置优先级高于uniIdRouter下的needLogin
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "记账",
+        "navigationBarBackgroundColor": "#f9db61"
+      }
     },
     {
       "title": "记账",
       "path": "pages/add/index",
+      "needLogin": true,
       "style": {
-        "navigationStyle": "default",
         "navigationBarTitleText": "记账",
         "navigationBarBackgroundColor": "#f9db61"
       }
     },
     {
       "title": "我的",
-      "path": "pages/user/index"
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/deactivate/deactivate",
-      "style": {
-        "navigationBarTitleText": "注销账号"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/userinfo",
-      "style": {
-        "navigationBarTitleText": "个人资料"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/bind-mobile/bind-mobile",
-      "style": {
-        "navigationBarTitleText": "绑定手机号码"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/cropImage/cropImage",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/login/login-smscode",
-      "style": {
-        "navigationBarTitleText": "手机验证码登录"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/register/register",
-      "style": {
-        "navigationBarTitleText": "注册"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/register/register-by-email",
-      "style": {
-        "navigationBarTitleText": "邮箱验证码注册"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/retrieve/retrieve",
-      "style": {
-        "navigationBarTitleText": "重置密码"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/retrieve/retrieve-by-email",
-      "style": {
-        "navigationBarTitleText": "通过邮箱重置密码"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/common/webview/webview",
-      "style": {
-        "enablePullDownRefresh": false,
-        "navigationBarTitleText": ""
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd",
-      "style": {
-        "enablePullDownRefresh": false,
-        "navigationBarTitleText": "修改密码"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/register/register-admin",
-      "style": {
-        "enablePullDownRefresh": false,
-        "navigationBarTitleText": "注册管理员账号"
-      }
-    }, {
-      "path": "uni_modules/uni-id-pages/pages/userinfo/set-pwd/set-pwd",
-      "style": {
-        "enablePullDownRefresh": false,
-        "navigationBarTitleText": "设置密码"
-      }
+      "path": "pages/user/index",
+      "needLogin": true
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "uni_modules/uni-id-pages/pages",
+      "pages": [
+        {
+          "path": "userinfo/deactivate/deactivate",
+          "style": {
+            "navigationBarTitleText": "注销账号"
+          }
+        },
+        {
+          "path": "userinfo/userinfo",
+          "style": {
+            "navigationBarTitleText": "个人资料"
+          }
+        },
+        {
+          "path": "userinfo/bind-mobile/bind-mobile",
+          "style": {
+            "navigationBarTitleText": "绑定手机号码"
+          }
+        },
+        {
+          "path": "userinfo/cropImage/cropImage",
+          "style": {
+            "navigationBarTitleText": ""
+          }
+        },
+        {
+          "path": "login/login-withoutpwd",
+          "style": {
+            "navigationBarTitleText": ""
+          }
+        },
+        {
+          "path": "login/login-withpwd",
+          "style": {
+            "navigationBarTitleText": ""
+          }
+        },
+        {
+          "path": "login/login-smscode",
+          "style": {
+            "navigationBarTitleText": "手机验证码登录"
+          }
+        },
+        {
+          "path": "register/register",
+          "style": {
+            "navigationBarTitleText": "注册"
+          }
+        },
+        {
+          "path": "register/register-by-email",
+          "style": {
+            "navigationBarTitleText": "邮箱验证码注册"
+          }
+        },
+        {
+          "path": "retrieve/retrieve",
+          "style": {
+            "navigationBarTitleText": "重置密码"
+          }
+        },
+        {
+          "path": "retrieve/retrieve-by-email",
+          "style": {
+            "navigationBarTitleText": "通过邮箱重置密码"
+          }
+        },
+        {
+          "path": "common/webview/webview",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": ""
+          }
+        },
+        {
+          "path": "userinfo/change_pwd/change_pwd",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "修改密码"
+          }
+        },
+        {
+          "path": "register/register-admin",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "注册管理员账号"
+          }
+        },
+        {
+          "path": "userinfo/set-pwd/set-pwd",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "设置密码"
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {
@@ -109,18 +138,21 @@
     "navigationBarTitleText": "企鹅账本",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8",
-    "navigationStyle": "custom"
+    "navigationStyle": "default"
   },
   "uniIdRouter": {
-    "loginPage": "uni_modules/uni-id-pages/pages/login/login-withoutpwd?type=apple", // 登录页面路径
+    // 登录页面路径
+    "loginPage": "uni_modules/uni-id-pages/pages/login/login-withoutpwd?type=weixin",
+    // 需要登录才可访问的页面列表，可以使用正则语法
     "needLogin": [
-      "pages/detail/.*" // 需要登录才可访问的页面列表，可以使用正则语法
+      "pages/detail/.*"
     ],
-    "resToLogin": true // 自动解析云对象及clientDB的错误码，如果是客户端token不正确或token过期则自动跳转配置的登录页面，配置为false则关闭此行为，默认true
+    // 自动解析云对象及clientDB的错误码，如果是客户端token不正确或token过期则自动跳转配置的登录页面，配置为false则关闭此行为，默认true
+    "resToLogin": true
   },
   "tabBar": {
     "color": "#707070",
-    "selectedColor": "#1296db",
+    "selectedColor": "#f9db61",
     "backgroundColor": "#f8f8f8",
     "borderStyle": "white",
     "blurEffect": "dark",
@@ -128,18 +160,19 @@
     "iconWidth": "24px",
     "spacing": "3px",
     "height": "50px",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/index/index",
         "text": "记录",
-        "iconPath": "./static/tabBarIcon/shovel-default.png",
-        "selectedIconPath": "./static/tabBarIcon/shovel-active.png",
+        "iconPath": "./static/tabBarIcon/list-default.png",
+        "selectedIconPath": "./static/tabBarIcon/list-active.png",
         "visible": true
       },
       {
         "pagePath": "pages/add/index",
         "text": "记账",
-        "iconPath": "./static/tabBarIcon/shovel-default.png",
-        "selectedIconPath": "./static/tabBarIcon/shovel-active.png",
+        "iconPath": "./static/tabBarIcon/add-default.png",
+        "selectedIconPath": "./static/tabBarIcon/add-active.png",
         "visible": true
       },
       {

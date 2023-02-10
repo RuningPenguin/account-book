@@ -1,2 +1,31 @@
 // db.collection('uni-id-users').add({ username: "wx" })
-db.collection('uni-id-users').add({ wx_openid: { mp: "123" } })
+const $ = db.command.aggregate
+db.collection('qie-account').aggregate()
+  .match({ uid: "63e21fb4f5cf3a42a27f13c0" })
+  .addFields({
+    // date: $.dateToString({ date: $.add([0, '$last_update_date']), format: "%Y-%m-%d-%u", onNull: 'null' }),
+
+    // date1: $.dateFromParts({
+    //   year: Date('$last_update_date')
+    // }),
+    dd: Date.getFullYear('$last_update_date')
+  })
+  // .sort({ last_update_date: -1 })
+  // .group({
+  //   _id: '$_id',
+  // }) // 分组字段
+  .end()
+// .where({ uid: "63e21fb4f5cf3a42a27f13c0" })
+// .field(
+//   'money, account_type, remark, bill_type, last_update_date, dateToString(add(new Date(0),last_update_date),"%Y-%m-%d-%u") as date'
+// ) // 字段处理
+
+// .groupField(
+//   `count(*) as total,
+//       sum(money) as all_money,
+//       push({money:money, account_type:account_type, remark:remark, bill_type:bill_type, date:date,last_update_date:last_update_date}) as list`
+// ) // 数据分组
+// .orderBy("last_update_date", "desc") // 时间倒序
+// .skip(0) // 跳过前n条
+// .limit(2) // 获取n条
+// .get();

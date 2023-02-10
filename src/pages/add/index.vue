@@ -57,6 +57,7 @@
 import {onMounted, ref} from "vue";
 import billList from "@/config/billType";
 import {tabConfig, tabList} from "./data";
+import uniApi from "@/tools/uniCloudRequest"
 
 const uTabs = ref(); // tab 实例
 const scrollViewHeight = ref<number>(0) // 滑动区域高度 可视高度 - tabs 高度 （默认px）
@@ -78,7 +79,7 @@ onMounted(() => {
 })
 
 // 账单类型点击
-const billTypeClick = ({current, name, title}) => {
+const billTypeClick = ({current, name, title}: any) => {
   keyboardShow.value = true;
   prefixIcon.value = name;
 
@@ -94,7 +95,7 @@ const billTypeClick = ({current, name, title}) => {
  * 键盘相关
  */
 // 按键被点击(点击退格键不会触发此事件)
-const valChange = (val) => {
+const valChange = (val: string) => {
   money.value += val;
   console.log(money.value);
 }
@@ -109,19 +110,19 @@ const backspace = () => {
 // 关闭键盘
 const close = () => {
   keyboardShow.value = false;
-  money.value = 0;
+  money.value = '0';
 }
 
 // 键盘确认
-const confirm = (e) => {
+const confirm = (e: any) => {
   const params = {
-    money: money.value,
-    type: current.value,
+    money: Number(money.value),
+    account_type: current.value,
     remark: remark.value,
-    billType: prefixIcon.value
+    bill_type: prefixIcon.value
   }
 
-  console.log(params)
+  uniApi("account/add_data", params).then(() => close())
 }
 
 /**

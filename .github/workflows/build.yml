@@ -4,7 +4,7 @@ name: auto_deploy
 on:
   # 代码推送时
   push:
-    branches: [ dev, uat, master, main ]
+#   branches: [ dev, uat, master, main ]
 
 #   创建tag时
 #  release:

@@ -1,0 +1,102 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+  "bsonType": "object",
+  "description": "账本记录表",
+  "required": ["uid", "money", "account_type", "bill_type"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "ID，系统自动生成"
+    },
+
+    "uid": {
+      "description": "所属用户id",
+      "foreignKey": "uni-id-users._id",
+      "errorMessage": "检查{uid}数据"
+    },
+
+    "remark": {
+      "bsonType": "string",
+      "description": "记录备注"
+    },
+
+    "money": {
+      "bsonType": "number",
+      "description": "金额",
+      "errorMessage": "{money} 不能为空"
+    },
+
+    "account_type": {
+      "bsonType": "number",
+      "description": "记录类型: 0 支出; 1 收入",
+      "enum": [0, 1],
+      "errorMessage": "{account_type} 不能为空"
+    },
+
+    "bill_type": {
+      "bsonType": "string",
+      "description": "金额类型",
+      "errorMessage": "{bill_type} 不能为空",
+      "enum": [{
+          "value": "chat",
+          "text": "社交"
+        },
+        {
+          "value": "red-packet",
+          "text": "红包"
+        },
+        {
+          "value": "home",
+          "text": "住房"
+        }, {
+          "value": "shopping-cart",
+          "text": "购物"
+        },
+        {
+          "value": "phone",
+          "text": "通讯"
+        },
+        {
+          "value": "car",
+          "text": "交通"
+        },
+        {
+          "value": "question-circle",
+          "text": "其他"
+        },
+        {
+          "value": "rmb-circle",
+          "text": "工资"
+        },
+        {
+          "value": "red-packet",
+          "text": "红包"
+        },
+        {
+          "value": "man-add",
+          "text": "兼职"
+        }
+      ]
+    },
+
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "last_update_date": {
+      "bsonType": "timestamp",
+      "description": "最后一次修改时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

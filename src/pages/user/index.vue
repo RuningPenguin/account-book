@@ -11,25 +11,23 @@
 </template>
 
 <script setup lang="ts">
-const uniIdCo = uniCloud.importObject('uni-id-co')
+import useUserStore from "@/store/user";
+import {onMounted} from "vue";
+import uniApi from "@/tools/uniCloudRequest";
+
+const {setToken, setUserinfo} = useUserStore();
 
 
-
-
-
-const wxLogin = async ()=> {
-  const {code} = await uni.login();
-  // console.log(code)
-  // uniCloud.callFunction({
-  //   name: 'home',
-  //   data: {
-  //     action: 'user/login/wxlogin',
-  //     data: {code}
-  //   }
-  // }).then(res => {console.log(res)});
-
-  uniIdCo.loginByWeixin({code})
+// 获取用户信息
+const getUserInfo = async () => {
+  uniApi("user/get_userinfo").then(res => {
+    setToken();
+    setUserinfo(res)
+  })
 }
+
+onMounted(getUserInfo)
+
 </script>
 
 <style lang="scss" scoped>
@@ -38,7 +36,8 @@ const wxLogin = async ()=> {
 
   .content {
     width: 600rpx;
-    margin: 80rpx auto 0;
+    padding: 80rpx 0 0;
+    margin: auto;
 
     .title {
       text-align: left;
