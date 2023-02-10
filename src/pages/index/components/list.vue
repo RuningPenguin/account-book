@@ -1,6 +1,6 @@
 <template>
   <div class="mt-10">
-    <u-index-list v-if="customNavHeight > 0" :custom-nav-height="customNavHeight">
+    <u-index-list v-if="customNavHeight > 0 && list.length > 0" :custom-nav-height="customNavHeight">
       <template v-for="(item, index) in list" :key="index">
         <qie-index-anchor
             class="index_anchor"
@@ -61,7 +61,11 @@ const getDefaultRemark = (item: any): string | undefined => {
 
 // 获取格式化日期
 const getFormatDate = (str: string, index: number): string => {
-  return str.split("-")[index];
+  try {
+    return str.split("-")[index];
+  } catch (e) {
+    return ''
+  }
 }
 
 // 获取总支出
