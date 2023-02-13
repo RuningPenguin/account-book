@@ -1,6 +1,6 @@
 <template>
   <div class="mt-10">
-    <u-index-list v-if="customNavHeight > 0 && list.length > 0" :custom-nav-height="customNavHeight">
+    <u-index-list v-if="customNavHeight > 0" :custom-nav-height="customNavHeight">
       <template v-for="(item, index) in list" :key="index">
         <qie-index-anchor
             class="index_anchor"
@@ -14,10 +14,8 @@
                 `${getFormatDate(item.date, 1)}月${getFormatDate(item.date, 2)}日 星期${formatWeek(getFormatDate(item.date, 3))}`
               }}
             </div>
-
-<!--            {{ `支出：${getAllMoney(item.list)}` }}-->
-            {{ `支出：${item.all_money}` }}
-
+            <span class="mr-20" v-if="item.income > 0">{{ `收入：${item.income}` }}</span>
+            <span v-if="item.expenditure > 0">{{ `支出：${item.expenditure}` }}</span>
           </div>
         </qie-index-anchor>
 
@@ -40,6 +38,8 @@
           </view>
         </u-index-item>
       </template>
+
+      <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>
     </u-index-list>
   </div>
 </template>
@@ -49,9 +49,15 @@ import billType from "@/config/billType";
 import {formatWeek} from "@/tools/format.tools";
 
 const props = defineProps({
+  status: {required: true, type: String, default: 'loadmore'},
   customNavHeight: {required: true, type: Number, default: 0},
   list: {required: true, type: Array, default: () => []},
+  loadmore: {
+    type: Function, default: () => {
+    }
+  },
 });
+
 
 // 获取默认值
 const getDefaultRemark = (item: any): string | undefined => {
@@ -69,8 +75,8 @@ const getFormatDate = (str: string, index: number): string => {
 }
 
 // 获取总支出
-const getAllMoney = (list: Array): number => {
-  return list.map(v => v.money).reduce((prev, cur) => prev + cur, 0)
+const getAllMoney = (list: any): number => {
+  return list.map((v: any) => v.money).reduce((prev, cur) => prev + cur, 0)
 }
 
 </script>

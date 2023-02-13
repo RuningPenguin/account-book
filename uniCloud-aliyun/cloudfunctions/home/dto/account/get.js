@@ -3,60 +3,78 @@ const { isFlag } = require("../../utils/index.js")
 
 // 参数验证
 function dataVerification(data) {
-  let { page, year, month } = data;
+  let { year, month } = data;
 
-  if (!isFlag(page)) throw "page 是必传的";
   if (!isFlag(year)) throw "year 是必传的";
   if (!isFlag(month)) throw "month 是必传的";
 
-  if (page <= 0) { page = 1 }
+  return { year, month }
+}
 
-  return { page, year, month }
-
+// 获取时间区间
+function createTimeSection(year, month) {
+  const prev = Date.parse(`${year}-${month}-01 00:00:00`);
+  const next = Date.parse(`${year}-${Number(month) + 1}-01 00:00:00`);
+  return [Number(prev), Number(next)]
 }
 
 module.exports.get = async ctx => {
   const { context, event, data } = ctx;
   const { uid } = event;
-  const { page, year, month } = dataVerification(data);
+  const { year, month } = dataVerification(data);
 
-  const limit = 2;
-  const skip = limit * (page - 1)
+  const [prve, next] = createTimeSection(year, month);
 
   const dbJQL = uniCloud.databaseForJQL({ event, context });
   const Account = dbJQL.collection("qie-account");
 
-  const res = Account.where({ uid })
+  const accountDate = { expenditure: 0, income: 0, groupList: [] }
+
+  const res = await Account.where(`uid == "${uid}" && last_update_date >= ${prve} && last_update_date < ${next}`)
     .groupBy('dateToString(add(new Date(0),last_update_date),"%Y-%m-%d-%u") as date') // 分组字段
     .groupField(
       `count(*) as total,
         sum(money) as all_money,
         push({money:money, account_type:account_type, remark:remark, bill_type:bill_type, date:date,last_update_date:last_update_date}) as list`
     ) // 数据分组
-    .orderBy("list.last_update_date", "desc") // 时间倒序
-    .skip(skip) // 跳过前n条
-    .limit(limit) // 获取n条
     .get();
 
-  // const res = Account.aggregate()
-  //   .where({ uid })
-  //   // .field(
-  //   //   'money, account_type, remark, bill_type, last_update_date, dateToString(add(new Date(0),last_update_date),"%Y-%m-%d-%u") as date'
-  //   // ) // 字段处理
+  // 单个分组数据倒序
+  res.data.forEach(item => {
+    item.expenditure = item.list.map(v => v.account_type == 0 ? v.money : 0).reduce((prev, cur) => prev + cur,
+      0) // 支出
+    item.income = item.list.map(v => v.account_type == 1 ? v.money : 0).reduce((prev, cur) => prev + cur,
+      0) // 收入
+    accountDate.expenditure += item.expenditure
+    accountDate.income += item.income
+    item.list.sort((a, b) => b.last_update_date - a.last_update_date)
+  })
+  accountDate.groupList = res.data
 
-  //   .groupBy('dateToString(add(new Date(0),last_update_date),"%Y-%m-%d-%u") as date') // 分组字段
-  //   .groupField(
-  //     `count(*) as total,
-  //       sum(money) as all_money,
-  //       push({money:money, account_type:account_type, remark:remark, bill_type:bill_type, date:date,last_update_date:last_update_date}) as list`
-  //   ) // 数据分组
-  //   .orderBy("last_update_date", "desc") // 时间倒序
-  //   .skip(skip) // 跳过前n条
-  //   .limit(limit) // 获取n条
-  //   .get();
+  return accountDate;
 
-  // const accountData = res.data;
+}
 
-  return res;
+module.exports.getTopData = async ctx => {
+  const { context, event, data } = ctx;
+  const { uid } = event;
+  const { year, month } = dataVerification(data);
+
+  const [prve, next] = createTimeSection(year, month);
+
+  const dbJQL = uniCloud.databaseForJQL({ event, context });
+  const Account = dbJQL.collection("qie-account");
+
+  const res = await Account.where(`uid == "${uid}" && last_update_date >= ${prve} && last_update_date < ${next}`)
+    .get()
+
+  // 计算总收入支出
+  res.data.forEach(item => {
+    item.expenditure = item.list.map(v => v.account_type == 0 ? v.money : 0).reduce((prev, cur) => prev + cur,
+      0) // 支出
+    item.income = item.list.map(v => v.account_type == 1 ? v.money : 0).reduce((prev, cur) => prev + cur,
+      0) // 收入
+    item.list.sort((a, b) => b.last_update_date - a.last_update_date)
+  })
 
 }

@@ -45,7 +45,7 @@ function responseInterception(response: any, resolve: Function, reject: Function
 }
 
 
-export default function uniApi(url: string, data: anyObj = {}, config: anyObj = {}) {
+export default function uniApi<T>(url: string, data: anyObj = {}, config: anyObj = {}): Promise<T> {
 	return new Promise((resolve, reject) => {
 		uniCloud.callFunction({
 			name: UNI_BASE_NAME || 'home',

@@ -1,6 +1,6 @@
 const uniID = require("uni-id-common")
 const { Service } = require("uni-cloud-router");
-const { get } = require("../../dto/account/get.js")
+const { get, getTopData } = require("../../dto/account/get.js")
 const { log } = require("console");
 
 module.exports = class AddService extends Service {
@@ -15,7 +15,13 @@ module.exports = class AddService extends Service {
     return {
       code: 200,
       message: '查询成功',
-      data: res.data
+      data: res
     }
+  }
+
+  // 获取头部数据
+  getTopData() {
+    const { ctx } = this;
+    const { context, event: { uid }, data } = ctx;
   }
 };

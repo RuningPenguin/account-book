@@ -13,7 +13,7 @@
       </div>
       <div class="content">
         <span
-            v-for="(num, idx) in '00.00'.split('.')"
+            v-for="(num, idx) in createMoneyArray(allMoney.expenditure)"
             :key="idx"
             :class="{'f-36':idx===0, 'f-28':idx===1}"
         >
@@ -22,7 +22,7 @@
       </div>
       <div class="content">
 				<span
-            v-for="(num, idx) in '00.00'.split('.')"
+            v-for="(num, idx) in createMoneyArray(allMoney.income)"
             :key="idx"
             :class="{'f-36':idx===0, 'f-28':idx===1}"
         >
@@ -49,6 +49,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
 
+const props = defineProps({
+  allMoney: {required: true, type: Object, default: () => ({})}
+})
+
+const emits = defineEmits(['confirm'])
+
 let baseNavbarBgColor = ref<String>("#f9db61"); // 头部背景颜色
 let datetimePickerShow = ref<Boolean>(false); // 日期选择弹框
 let datetime = ref<Number>(Number(Date.now())); // 头部背景颜色
@@ -61,8 +67,13 @@ const closeDatetimePicker = () => {
 const confirmDatetimePicker = ({value}: any) => {
   closeDatetimePicker();
   datetime.value = value;
+  emits('confirm', uni.$u.timeFormat(datetime.value, 'yyyy-mm'))
 }
 
+//
+const createMoneyArray = (num: number) => {
+  return (String(num).includes('.') ? String(num) : String(num) + '.00').split('.')
+}
 </script>
 
 <style lang="scss" scoped>

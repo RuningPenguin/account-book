@@ -10,4 +10,8 @@ module.exports = class AccountController extends Controller {
     const data = this.ctx.data;
     return this.service.account.get.getAccountList();
   }
+
+  get_top_data() {
+    return this.service.account.get.getTopData();
+  }
 };
