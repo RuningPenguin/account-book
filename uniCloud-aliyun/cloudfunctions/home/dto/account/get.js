@@ -37,6 +37,7 @@ module.exports.get = async ctx => {
         sum(money) as all_money,
         push({money:money, account_type:account_type, remark:remark, bill_type:bill_type, date:date,last_update_date:last_update_date}) as list`
     ) // 数据分组
+    .orderBy('date', 'desc')
     .get();
 
   // 单个分组数据倒序

@@ -47,6 +47,7 @@
 <script lang="ts" setup>
 import billType from "@/config/billType";
 import {formatWeek} from "@/tools/format.tools";
+import {toRefs, watch} from "vue";
 
 const props = defineProps({
   status: {required: true, type: String, default: 'loadmore'},
@@ -57,6 +58,12 @@ const props = defineProps({
     }
   },
 });
+
+const {customNavHeight} = toRefs(props)
+
+watch(customNavHeight,(a,b)=>{
+  console.log(a,b,999)
+})
 
 
 // 获取默认值

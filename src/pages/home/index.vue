@@ -6,7 +6,7 @@
       <Budget/>
     </div>
   </div>
-  <List v-if="list.length > 0" :customNavHeight="customNavHeight" :status="status" :list="list"
+  <List v-show="list.length > 0" :customNavHeight="customNavHeight" :status="status" :list="list"
         :loadmore="getAccountList"/>
 </template>
 
@@ -18,7 +18,6 @@ import Top from './components/top.vue';
 import Budget from './components/budget.vue';
 import List from './components/list.vue';
 import useHomeStore from "@/store/home";
-import {getMonthDay} from "@/tools/date.tools";
 
 const {state, getAccountList, updateAccountParams, updateList} = useHomeStore();
 const {accountParams, list, status, allMoney} = toRefs(state);
@@ -40,15 +39,14 @@ const confirm = (data: string) => {
 }
 
 // 获取下一月 或 上一月
-const getMonth = (year: string|number, month: string|number, type:'next'|'prev'):[string] => {
-  const d = new Date();
-  const result = []
-  const monthList = [1,2,3,4,5,6,7,8,9,10,11,12];
-  const days = getMonthDay(year,month);
-  const nowYear = d.getFullYear();
-  const nowMonth = d.getMonth() + 1;
-}
-
+// const getMonth = (year: string|number, month: string|number, type:'next'|'prev'):[string] => {
+//   const d = new Date();
+//   const result = []
+//   const monthList = [1,2,3,4,5,6,7,8,9,10,11,12];
+//   const days = getMonthDay(year,month);
+//   const nowYear = d.getFullYear();
+//   const nowMonth = d.getMonth() + 1;
+// }
 
 
 onLoad(async () => {
@@ -57,18 +55,6 @@ onLoad(async () => {
 
   getAccountList();
 });
-
-
-// onPageScroll(() => {
-//
-//   const params = {year: '', month: ''};
-//   params.year = year;
-//   params.month = month;
-//
-//   updateAccountParams(params)
-//
-//   getAccountList()
-// })
 </script>
 
 <style>

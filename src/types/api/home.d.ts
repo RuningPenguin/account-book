@@ -1,13 +1,13 @@
 export type AccountList = {
 	income: number; // 收入金额总数
 	expenditure: number; // 支出金额总数
-	groupList: [{
+	groupList: Array<{
 		income: number; // 收入金额总数
 		expenditure: number; // 支出金额总数
 		date: string; // 所属日期
 		list: AccountListItem; // 详细数据
 		total: number; // 当前日期数据总数
-	}]
+	}>
 }
 
 

@@ -57,7 +57,10 @@
 import {onMounted, ref} from "vue";
 import billList from "@/config/billType";
 import {tabConfig, tabList} from "./data";
-import uniApi from "@/tools/uniCloudRequest"
+import uniApi from "@/tools/uniCloudRequest";
+
+import useHomeStore from "@/store/home";
+const {getAccountList, updateAccountParams, updateList} = useHomeStore()
 
 const uTabs = ref(); // tab 实例
 const scrollViewHeight = ref<number>(0) // 滑动区域高度 可视高度 - tabs 高度 （默认px）
@@ -68,6 +71,7 @@ const money = ref<string>(''); // 本次记录金额
 const keyboardShow = ref<boolean>(false); // 当前显示内容索引
 const remark = ref<string>(''); // 备注信息
 const prefixIcon = ref<string>('edit-pen'); // 账单类型图标
+
 
 // 数据初始化
 const init = () => {
@@ -122,7 +126,16 @@ const confirm = (e: any) => {
     bill_type: prefixIcon.value
   }
 
-  uniApi("account/add_data", params).then(() => close())
+  close();
+
+  uniApi("account/add_data", params).then(() => {
+    updateAccountParams({
+      year: uni.$u.timeFormat(Date.now(), 'yyyy'),
+      month: uni.$u.timeFormat(Date.now(), 'mm')
+    })
+    updateList([])
+    getAccountList()
+  })
 }
 
 /**

@@ -1,12 +1,9 @@
 // 用户信息
 import {defineStore} from "pinia";
 import {reactive} from "vue";
-import useStorage from "@/tools/storage";
 import {getAccountListApi} from "@/apis/home";
 import type {HomeState, HomeStore} from "@/types/store/home";
 import type {AccountList} from "@/types/api/home";
-
-const storage = useStorage();
 
 
 const useHomeStore = defineStore("home", (): HomeStore => {
@@ -19,7 +16,8 @@ const useHomeStore = defineStore("home", (): HomeStore => {
 		list: [],// 数据列表
 		status: 'nomore', // 列表加载状态
 		allMoney:{
-			expenditure: 0, income: 0
+			expenditure: 0,
+			income: 0
 		}, // 顶部数据
 	});
 	
@@ -31,7 +29,6 @@ const useHomeStore = defineStore("home", (): HomeStore => {
 			// state.status = 'loadmore'
 			state.allMoney.expenditure = res.expenditure
 			state.allMoney.income = res.income
-			// @ts-ignore
 			state.list = [...state.list, ...res.groupList]
 			// state.status = 'nomore'
 		})

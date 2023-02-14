@@ -13,7 +13,7 @@
       </div>
       <div class="content">
         <span
-            v-for="(num, idx) in createMoneyArray(allMoney.expenditure)"
+            v-for="(num, idx) in createMoneyArray(allMoney.expenditure || 0)"
             :key="idx"
             :class="{'f-36':idx===0, 'f-28':idx===1}"
         >
@@ -22,7 +22,7 @@
       </div>
       <div class="content">
 				<span
-            v-for="(num, idx) in createMoneyArray(allMoney.income)"
+            v-for="(num, idx) in createMoneyArray(allMoney.income || 0)"
             :key="idx"
             :class="{'f-36':idx===0, 'f-28':idx===1}"
         >
