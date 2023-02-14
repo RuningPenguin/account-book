@@ -53,10 +53,10 @@
         "appid" : "wxe01f582812d9d742",
         "appsecret" : "f6b3f184765875cea96696d6ff367cae",
         "setting" : {
-            "urlCheck" : false,
+            "urlCheck" : true,
             "es6" : false,
-            "postcss" : false,
-            "minified" : false
+            "postcss" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "permission" : {},

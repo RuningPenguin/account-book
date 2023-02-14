@@ -78,9 +78,12 @@ const createMoneyArray = (num: number) => {
 
 <style lang="scss" scoped>
 .top {
-  padding: 20rpx 32rpx 0;
-  height: 240rpx;
-  background-image: linear-gradient(to bottom, $qie-color 80%, #fff 100%);
+  padding: 20rpx 32rpx;
+  background: $qie-color;
+
+  &.bg-img{
+    background-image: linear-gradient(to bottom, $qie-color 50%, #fff 100%);
+  }
 
   .label {
     display: flex;

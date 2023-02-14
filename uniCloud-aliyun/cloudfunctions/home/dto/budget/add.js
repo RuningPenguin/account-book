@@ -4,11 +4,11 @@ module.exports.create = async ctx => {
   const { context, event, data } = ctx;
   const { uid } = event;
 
-  const { money, account_type, remark, bill_type } = data;
+  const { money, budget_money, budget_type } = data;
 
   const dbJQL = uniCloud.databaseForJQL({ event, context });
-  const Account = dbJQL.collection("qie-account");
+  const Account = dbJQL.collection("qie-budget");
 
-  return Account.add({ money, account_type, remark, bill_type });
+  return Account.add({ money, budget_money, budget_type });
 
 }

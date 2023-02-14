@@ -9,7 +9,6 @@ module.exports = class AddService extends Service {
     const { ctx } = this;
     const { context, event: { uid }, data } = ctx;
 
-    // 创建一条账单数据
     const res = await get(ctx);
 
     return {
@@ -17,11 +16,5 @@ module.exports = class AddService extends Service {
       message: '查询成功',
       data: res
     }
-  }
-
-  // 获取头部数据
-  getTopData() {
-    const { ctx } = this;
-    const { context, event: { uid }, data } = ctx;
   }
 };

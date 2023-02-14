@@ -1,8 +1,8 @@
 // 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
 {
   "bsonType": "object",
-  "description": "账本记录表",
-  "required": ["uid", "money", "account_type", "bill_type"],
+  "description": "预算记录表",
+  "required": ["uid", "money", "budget_money", "budget_type"],
   "permission": {
     "read": true,
     "create": true,
@@ -23,29 +23,29 @@
       }
     },
 
-    "remark": {
-      "bsonType": "string",
-      "description": "记录备注"
-    },
-
     "money": {
       "bsonType": "number",
-      "description": "金额",
+      "description": "预算金额",
       "errorMessage": "{money} 不能为空"
     },
 
-    "account_type": {
+    "budget_money": {
       "bsonType": "number",
-      "description": "记录类型: 0 支出; 1 收入",
-      "enum": [0, 1],
-      "errorMessage": "{account_type} 不能为空"
+      "description": "预算类型金额",
+      "errorMessage": "{budget_money} 不能为空",
+      "defaultValue": 0
     },
 
-    "bill_type": {
+    "budget_type": {
       "bsonType": "string",
-      "description": "金额类型",
-      "errorMessage": "{bill_type} 不能为空",
+      "description": "预算类型",
+      "errorMessage": "{budget_type} 不能为空",
+      "defaultValue": "all",
       "enum": [{
+          "value": "all",
+          "text": "本月预算"
+        },
+        {
           "value": "chat",
           "text": "社交"
         },

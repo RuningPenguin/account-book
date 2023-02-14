@@ -10,7 +10,7 @@
     {
       "title": "企鹅账本",
       "path": "pages/home/index",
-      "needLogin": true,
+//      "needLogin": true,
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "记账",

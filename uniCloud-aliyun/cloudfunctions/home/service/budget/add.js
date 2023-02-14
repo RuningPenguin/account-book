@@ -1,15 +1,13 @@
-const uniID = require("uni-id-common")
 const { Service } = require("uni-cloud-router");
-const { create } = require("../../dto/account/add.js")
+const { create } = require("../../dto/budget/add.js")
 const { log } = require("console");
 
 module.exports = class AddService extends Service {
-  // 添加一条账本数据
-  async createData() {
+  // 添加一条预算
+  async createBudget() {
     const { ctx } = this;
     const { context, event: { uid }, data } = ctx;
 
-    // 创建一条账单数据
     const res = await create(ctx);
 
     return {

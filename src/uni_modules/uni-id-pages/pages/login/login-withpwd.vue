@@ -51,7 +51,7 @@
 				"needCaptcha": false,
 				"focusUsername": false,
 				"focusPassword": false,
-				"logo": "/static/logo.png"
+        logo: "https://mp-0c46f795-9792-4c18-98f1-a00e5190ebe9.cdn.bspapp.com/cloudstorage/07f0fd30-d247-43b1-9da7-0aea57411349.png"
 			}
 		},
 		onShow() {
