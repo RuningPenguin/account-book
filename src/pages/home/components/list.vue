@@ -47,11 +47,15 @@
 <!--    <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>-->
   </u-index-list>
 
+	<qie-keyboard ref="numRef" @change="keyBoardChange"/>
+
 </template>
 
 <script lang="ts" setup>
 import billType from "@/config/billType";
 import {formatWeek} from "@/tools/format.tools";
+import QieKeyboard from "@/components/qie-keyboard/qie-keyboard.vue";
+import { ref } from "vue";
 
 const props = defineProps({
   status: {required: true, type: String, default: 'loadmore'},
@@ -82,6 +86,17 @@ const getFormatDate = (str: string, index: number): string => {
 // 获取总支出
 const getAllMoney = (list: any): number => {
   return list.map((v: any) => v.money).reduce((prev, cur) => prev + cur, 0)
+}
+
+const numRef = ref<InstanceType<typeof QieKeyboard>>()
+const showKeyboard = (item: any) => {
+	numRef.value.open({
+		date: '2022/12/03',
+		value: item
+	})
+}
+const keyBoardChange = async (item: any) => {
+
 }
 
 </script>
