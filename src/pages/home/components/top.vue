@@ -2,8 +2,8 @@
   <div class="top">
     <div class="label">
       <div class="label_title">{{ $u.timeFormat(datetime, 'yyyy-mm').split('-')[0] }}年</div>
-      <div class="label_title">收入</div>
       <div class="label_title">支出</div>
+      <div class="label_title">收入</div>
     </div>
     <div class="content_box">
       <div class="content" @click="datetimePickerShow=true">
@@ -39,6 +39,7 @@
       confirmColor="#f9db61"
       visibleItemCount="10"
       :show="datetimePickerShow"
+      :minDate="new Date(2023,1,0).getTime()"
       :maxDate="Number(new Date())"
       :closeOnClickOverlay="true"
       @cancel="closeDatetimePicker"

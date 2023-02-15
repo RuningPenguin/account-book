@@ -6,29 +6,32 @@
           border-width="10"
           active-color="#f9db61"
           bg-color="transparent"
-          :percent="30"
+          :percent="data.dayP"
       >
-        <div class="q-flex q-flex-col q-flex-center">
-          <div>20</div>
+        <div class="q-flex q-flex-col q-flex-center" v-if="!data.overBudget && data.dayS >= 0">
+          <div>{{ data.dayS }}</div>
           <div>今日剩余</div>
         </div>
+        <div v-else class="f-red">超预算</div>
       </qie-circle-progress>
       <qie-circle-progress
           width="150"
           border-width="10"
           active-color="#f9db61"
           bg-color="transparent"
-          :percent="60"
+          :percent="data.monthP"
       >
-        <div class="q-flex q-flex-col q-flex-center">
-          <div>20</div>
+        <div class="q-flex q-flex-col q-flex-center" v-if="!data.overBudget">
+          <div>{{ data.monthS }}</div>
           <div>本月剩余</div>
         </div>
+        <div v-else class="f-red">超预算</div>
       </qie-circle-progress>
-      <div class="q-flex q-flex-col q-flex-aic q-flex-1">
+
+      <div class="q-flex q-flex-col q-flex-aic q-flex-1" v-if="!data.overBudget">
         <div class="mb-20">
           <span
-              v-for="(num, idx) in '00.00'.split('.')"
+              v-for="(num, idx) in (data.everyDay || '0').split('.')"
               :key="idx"
               :class="{ 'f-36': idx === 0, 'f-28': idx === 1 }"
           >
@@ -36,6 +39,19 @@
           </span>
         </div>
         <div>本月每日可支配余额</div>
+      </div>
+
+      <div class="q-flex q-flex-col q-flex-aic q-flex-1" v-else>
+        <div class="mb-20">
+          <span
+              v-for="(num, idx) in (Math.abs(data.monthS) || '0').toFixed(2).split('.')"
+              :key="idx"
+              :class="{ 'f-36': idx === 0, 'f-28': idx === 1 }"
+          >
+            {{ idx === 1 ? '.' : '' }}{{ num }}
+          </span>
+        </div>
+        <div class="f-red">已超预算</div>
       </div>
     </div>
   </div>
@@ -54,18 +70,23 @@
 </template>
 
 <script setup lang="ts">
-import {ref, toRefs} from 'vue';
+import {ref, toRefs, watch} from 'vue';
 
 const props = defineProps({
+  data: {required: true, type: Object, default: () => ({})},
   canOpenModalStatus: {required: true, type: Boolean, default: false}
 })
 
 const emits = defineEmits(["setExpenditure"])
 
-const {canOpenModalStatus} = toRefs(props)
+const {data, canOpenModalStatus} = toRefs(props)
 
 let show = ref<boolean>(false);
 let money = ref<number>(0);
+
+watch(data, (a, b) => {
+  money.value = Number(a.month)
+}, {immediate: true})
 
 // 关闭弹框
 const close = () => {

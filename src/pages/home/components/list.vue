@@ -37,14 +37,7 @@
         </view>
       </u-index-item>
     </template>
-
-<!--    <u-empty-->
-<!--        v-else-->
-<!--        mode="car"-->
-<!--        icon="http://cdn.uviewui.com/uview/empty/car.png"-->
-<!--    />-->
-
-<!--    <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>-->
+    <!--    <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>-->
   </u-index-list>
 
 </template>
@@ -58,8 +51,7 @@ const props = defineProps({
   customNavHeight: {required: true, type: Number, default: 0},
   list: {required: true, type: Array, default: () => []},
   loadmore: {
-    type: Function, default: () => {
-    }
+    type: Function, default: () => {}
   },
 });
 
@@ -78,12 +70,6 @@ const getFormatDate = (str: string, index: number): string => {
     return ''
   }
 }
-
-// 获取总支出
-const getAllMoney = (list: any): number => {
-  return list.map((v: any) => v.money).reduce((prev, cur) => prev + cur, 0)
-}
-
 </script>
 
 <style lang="scss" scoped>
