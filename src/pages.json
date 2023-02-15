@@ -174,14 +174,14 @@
         "iconPath": "./static/tabBarIcon/add-default.png",
         "selectedIconPath": "./static/tabBarIcon/add-active.png",
         "visible": true
-      },
-      {
-        "pagePath": "pages/user/index",
-        "text": "我的",
-        "iconPath": "./static/tabBarIcon/user-default.png",
-        "selectedIconPath": "./static/tabBarIcon/user-active.png",
-        "visible": true
       }
+//      {
+//        "pagePath": "pages/user/index",
+//        "text": "我的",
+//        "iconPath": "./static/tabBarIcon/user-default.png",
+//        "selectedIconPath": "./static/tabBarIcon/user-active.png",
+//        "visible": true
+//      }
     ]
   }
 }
