@@ -1,5 +1,5 @@
 <template>
-  <div class="budget_wrap">
+  <div class="budget_wrap" v-if="showProgress">
     <div class="budget" @click="open">
       <qie-circle-progress
           width="150"
@@ -73,20 +73,22 @@
 import {ref, toRefs, watch} from 'vue';
 
 const props = defineProps({
-  data: {required: true, type: Object, default: () => ({})},
-  canOpenModalStatus: {required: true, type: Boolean, default: false}
+  showProgress: {type: Boolean, default: true},
+  defaultMoney: {type: Number, default: 0},
+  data: {type: Object, default: () => ({})},
+  canOpenModalStatus: {required:true, type: Boolean, default: false}
 })
 
 const emits = defineEmits(["setExpenditure"])
 
-const {data, canOpenModalStatus} = toRefs(props)
+const {data, showProgress, defaultMoney, canOpenModalStatus} = toRefs(props)
 
 let show = ref<boolean>(false);
-let money = ref<number>(0);
+let money = ref<any>(defaultMoney || 0);
 
-watch(data, (a, b) => {
+showProgress && (watch(data, (a, b) => {
   money.value = Number(a.month)
-}, {immediate: true})
+}, {immediate: true}))
 
 // 关闭弹框
 const close = () => {
@@ -105,7 +107,7 @@ defineExpose({open, close})
 <style lang="scss" scoped>
 .budget_wrap {
   padding: 0 32rpx 20rpx;
-  background-image: linear-gradient(to bottom, $qie-color 0%, #fff 60%);
+  background-image: linear-gradient(to bottom, $qie-color 0%, #fafafa 60%);
 
   .budget {
     padding: 10rpx 20rpx;

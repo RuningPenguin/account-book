@@ -1,8 +1,8 @@
 <template>
   <div class="data_box">
-    <base-navbar :bgColor="baseNavbarBgColor"/>
-    <Top :allMoney="allMoney" @confirm="confirm"/>
-    <Budget ref="budget" :data="budgetDate" :canOpenModalStatus="canOpenModalStatus" @setExpenditure="setExpenditure"/>
+    <Top :showBgImg="budgetDate.month <= 0" :allMoney="allMoney" @confirm="confirm"/>
+    <Budget v-if="budgetDate.month > 0" ref="budget" :data="budgetDate" :canOpenModalStatus="canOpenModalStatus"
+            @setExpenditure="setExpenditure"/>
   </div>
   <List v-show="list.length > 0" :customNavHeight="customNavHeight" :status="status" :list="list"
         :loadmore="getAccountList"/>
@@ -23,8 +23,6 @@ import Budget from './components/budget.vue';
 import List from './components/list.vue';
 import useHomeStore from "@/store/home";
 import {createBudgetApi} from "@/apis/home";
-import {evaluate} from "mathjs"
-import {perc1to2} from "@/tools/format.tools";
 
 const {state, getAccountList, reloadList} = useHomeStore();
 const {accountParams, list, status, allMoney, budgetDate} = toRefs(state);
@@ -52,8 +50,8 @@ const confirm = (data: string) => {
 
 // 设置预算
 const setExpenditure = async (money: number) => {
-  budget.value.close()
   await createBudgetApi({money})
+  budget.value.close()
 
   reloadList();
 };

@@ -3,7 +3,7 @@
     <template v-for="(item, index) in list" :key="index">
       <qie-index-anchor
           class="index_anchor"
-          bgColor="#fff"
+          bgColor="#fafafa"
           height="20"
           size="10"
       >

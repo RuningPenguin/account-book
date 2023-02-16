@@ -218,9 +218,11 @@ export default {
 
 .u-canvas-bg {
 	position: absolute;
+  z-index: 0 !important;
 }
 
 .u-canvas {
 	position: absolute;
+  z-index: 0 !important;
 }
 </style>
