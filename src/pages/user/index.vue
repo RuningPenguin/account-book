@@ -82,6 +82,7 @@ const setExpenditure = async (money: number) => {
   await createBudgetApi({money})
   budget.value.close()
   reloadList();
+  getUserinfo()
 };
 
 onLoad(()=>{
