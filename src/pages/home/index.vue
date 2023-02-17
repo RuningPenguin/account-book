@@ -1,24 +1,31 @@
 <template>
   <div class="data_box">
-    <base-navbar :bgColor="baseNavbarBgColor"/>
-    <Top :allMoney="allMoney" @confirm="confirm"/>
-    <Budget ref="budget" :canOpenModalStatus="canOpenModalStatus" @setExpenditure="setExpenditure"/>
+    <Top :showBgImg="budgetDate.month <= 0" :allMoney="allMoney" @confirm="confirm"/>
+    <Budget v-if="budgetDate.month > 0" ref="budget" :data="budgetDate" :canOpenModalStatus="canOpenModalStatus"
+            @setExpenditure="setExpenditure"/>
   </div>
   <List v-show="list.length > 0" :customNavHeight="customNavHeight" :status="status" :list="list"
         :loadmore="getAccountList"/>
+  <u-empty
+      v-show="list.length <= 0"
+      mode="history"
+      icon="http://cdn.uviewui.com/uview/empty/history.png"
+      :marginTop="$u.addUnit(customNavHeight - 44,'rpx')"
+  />
 </template>
 
 <script setup lang="ts">
-import {computed, ref, toRefs} from 'vue';
-import {onLoad} from '@dcloudio/uni-app';
+import {computed, ComputedRef, getCurrentInstance, onMounted, ref, toRefs} from 'vue';
 import {getElement} from '@/tools/element.tools';
 import Top from "@/pages/home/components/top.vue";
 import Budget from './components/budget.vue';
 import List from './components/list.vue';
 import useHomeStore from "@/store/home";
+import {createBudgetApi} from "@/apis/home";
 
-const {state, getAccountList, updateAccountParams, updateList} = useHomeStore();
-const {accountParams, list, status, allMoney} = toRefs(state);
+const instance = getCurrentInstance()
+const {state, getAccountList, reloadList} = useHomeStore();
+const {accountParams, list, status, allMoney, budgetDate} = toRefs(state);
 
 const budget = ref();
 const nowYear = uni.$u.timeFormat(Date.now(), 'yyyy')
@@ -29,7 +36,7 @@ let baseNavbarBgColor = ref<String>('#f9db61'); // 头部背景颜色
 
 
 // 是否能打开预算弹框
-const canOpenModalStatus = computed(() => accountParams.value.year === nowYear && accountParams.value.month === nowMonth);
+const canOpenModalStatus: ComputedRef<boolean> = computed(() => accountParams.value.year === nowYear && accountParams.value.month === nowMonth);
 
 // 获取选择日期
 const confirm = (data: string) => {
@@ -38,23 +45,21 @@ const confirm = (data: string) => {
   params.year = year;
   params.month = month;
 
-  updateAccountParams(params)
-  updateList([])
-  getAccountList();
+  reloadList(params);
 }
 
 // 设置预算
-const setExpenditure = (money: number) => {
-  console.log(money)
+const setExpenditure = async (money: number) => {
+  await createBudgetApi({money})
   budget.value.close()
-  // createBudgetApi({money:100})
+
+  reloadList();
 };
 
-onLoad(async () => {
-  const {height}: anyObj = await getElement('.data_box');
+onMounted(async () => {
+  await getAccountList();
+  const {height}: anyObj = await getElement('.data_box', false, instance);
   customNavHeight.value = height;
-
-  getAccountList();
 });
 </script>
 

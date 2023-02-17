@@ -125,7 +125,7 @@ export const mutations = {
 				duration: 3000
 			});
 		}
-		this.updateUserInfo()
+		// this.updateUserInfo()
 
 		uni.$emit('uni-id-pages-login-success')
 

@@ -3,7 +3,7 @@
     <template v-for="(item, index) in list" :key="index">
       <qie-index-anchor
           class="index_anchor"
-          bgColor="#fff"
+          bgColor="#fafafa"
           height="20"
           size="10"
       >
@@ -37,14 +37,7 @@
         </view>
       </u-index-item>
     </template>
-
-<!--    <u-empty-->
-<!--        v-else-->
-<!--        mode="car"-->
-<!--        icon="http://cdn.uviewui.com/uview/empty/car.png"-->
-<!--    />-->
-
-<!--    <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>-->
+    <!--    <u-loadmore :line="true" :status="status" @loadmore="loadmore"/>-->
   </u-index-list>
 
 	<qie-keyboard ref="numRef" @change="keyBoardChange"/>
@@ -55,7 +48,7 @@
 import billType from "@/config/billType";
 import {formatWeek} from "@/tools/format.tools";
 import QieKeyboard from "@/components/qie-keyboard/qie-keyboard.vue";
-import { ref } from "vue";
+import {ref, toRefs, watch} from "vue";
 
 const props = defineProps({
   status: {required: true, type: String, default: 'loadmore'},
@@ -66,7 +59,6 @@ const props = defineProps({
     }
   },
 });
-
 
 // 获取默认值
 const getDefaultRemark = (item: any): string | undefined => {
@@ -107,7 +99,6 @@ const keyBoardChange = async (item: any) => {
   width: 100%;
   color: #606266;
   font-size: 20rpx;
-	background-image: url('src/static/tabBarIcon/1.png');
 }
 
 .list-cell {

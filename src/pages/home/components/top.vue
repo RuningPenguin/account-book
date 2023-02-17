@@ -1,9 +1,9 @@
 <template>
-  <div class="top">
+  <div :class="['top', {'bg-img': showBgImg}]">
     <div class="label">
       <div class="label_title">{{ $u.timeFormat(datetime, 'yyyy-mm').split('-')[0] }}年</div>
-      <div class="label_title">收入</div>
       <div class="label_title">支出</div>
+      <div class="label_title">收入</div>
     </div>
     <div class="content_box">
       <div class="content" @click="datetimePickerShow=true">
@@ -39,17 +39,20 @@
       confirmColor="#f9db61"
       visibleItemCount="10"
       :show="datetimePickerShow"
+      :minDate="new Date(2023,1,0).getTime()"
       :maxDate="Number(new Date())"
       :closeOnClickOverlay="true"
       @cancel="closeDatetimePicker"
       @confirm="confirmDatetimePicker"
   />
+
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue";
 
 const props = defineProps({
+  showBgImg: {type: true, default: false},
   allMoney: {required: true, type: Object, default: () => ({})}
 })
 
@@ -81,8 +84,8 @@ const createMoneyArray = (num: number) => {
   padding: 20rpx 32rpx;
   background: $qie-color;
 
-  &.bg-img{
-    background-image: linear-gradient(to bottom, $qie-color 50%, #fff 100%);
+  &.bg-img {
+    background-image: linear-gradient(to bottom, $qie-color 50%, #fafafa 100%);
   }
 
   .label {

@@ -1,12 +1,13 @@
 // 全局样式
 @import "./global.scss";
-@import "./fontSize.scss";
+@import "./font.scss";
 @import "./layout.scss";
 
 Page {
   box-sizing: border-box;
   height: 100%;
   font-size: 24rpx;
+  background: #fafafa;
 }
 
 :root{

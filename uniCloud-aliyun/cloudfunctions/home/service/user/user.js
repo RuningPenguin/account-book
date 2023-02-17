@@ -7,13 +7,14 @@ module.exports = class UserService extends Service {
   // 获取用户数据
   async getUserInfo() {
     const { ctx } = this;
+    const { context, event, data } = ctx;
 
-    const data = await getUserInfo(ctx)
+    const res = await getUserInfo(ctx);
 
     return {
       code: 200,
       message: '查询成功',
-      data: data[0]
+      data: res
     }
   }
 };

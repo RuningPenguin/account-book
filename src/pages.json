@@ -10,11 +10,9 @@
     {
       "title": "企鹅账本",
       "path": "pages/home/index",
-//      "needLogin": true,
+      "needLogin": true,
       "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "记账",
-        "navigationBarBackgroundColor": "#f9db61"
+        "navigationBarTitleText": "企鹅账本"
       }
     },
     {
@@ -22,8 +20,7 @@
       "path": "pages/add/index",
       "needLogin": true,
       "style": {
-        "navigationBarTitleText": "记账",
-        "navigationBarBackgroundColor": "#f9db61"
+        "navigationBarTitleText": "记账"
       }
     },
     {
@@ -136,8 +133,8 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "企鹅账本",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8",
+    "navigationBarBackgroundColor": "#f9db61",
+    "backgroundColor": "#fff",
     "navigationStyle": "default"
   },
   "uniIdRouter": {
@@ -153,7 +150,7 @@
   "tabBar": {
     "color": "#707070",
     "selectedColor": "#f9db61",
-    "backgroundColor": "#f8f8f8",
+    "backgroundColor": "#fff",
     "borderStyle": "white",
     "blurEffect": "dark",
     "fontSize": "10px",

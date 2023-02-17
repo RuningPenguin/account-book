@@ -1,0 +1,7 @@
+{
+  "name": "ew-task",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

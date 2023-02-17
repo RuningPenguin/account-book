@@ -1,5 +1,7 @@
 const { log } = require("console");
-const { isFlag } = require("../../utils/index.js")
+const { isFlag, createTimeSection } = require("../../utils/index.js")
+const { dateFormat } = require("../../utils/format.js")
+const { evaluate } = require('../../lib/math.js')
 
 // 参数验证
 function dataVerification(data) {
@@ -11,28 +13,51 @@ function dataVerification(data) {
   return { year, month }
 }
 
-// 获取时间区间
-function createTimeSection(year, month) {
-  const prev = Date.parse(`${year}-${month}-01 00:00:00`);
-  const next = Date.parse(`${year}-${Number(month) + 1}-01 00:00:00`);
-  return [Number(prev), Number(next)]
+// 计算预算
+function calcBudget(money, expenditure, item = {}) {
+  const obj = { day: 0, month: 0, everyDay: 0, isToday: false }
+  if (!isFlag(money)) return obj
+
+  const [y, m, d] = (item.date || '').split('-')
+
+  const days = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+
+  const [prev, next, timeStamp] = createTimeSection(y, m, d, 'd');
+
+  obj.isToday = item.date ? (timeStamp >= prev && timeStamp < next) : false;
+  obj.month = money.toFixed(2)
+  obj.day = evaluate(`${money} / ${days}`).toFixed(2);
+  obj.everyDay = evaluate(`(${money} - ${expenditure}) / (${days} - ${new Date().getDate()})`).toFixed(2);
+
+  return obj
 }
 
 module.exports.get = async ctx => {
   const { context, event, data } = ctx;
   const { uid } = event;
   const { year, month } = dataVerification(data);
-  const [prve, next] = createTimeSection(year, month);
+  const [prev, next] = createTimeSection(year, month);
 
   // 返回数据
-  const accountDate = { expenditure: 0, income: 0, groupList: [] }
+  const accountDate = {
+    expenditure: 0,
+    income: 0,
+    groupList: [],
+    budget: {
+      day: 0,
+      month: 0,
+      everyDay: 0,
+      isToday: false
+    }
+  }
 
   // jql 操作数据库
   const dbJQL = uniCloud.databaseForJQL({ event, context });
   const Account = dbJQL.collection("qie-account");
+  const Budget = dbJQL.collection("qie-budget");
 
-  const res = await Account
-    .where(`uid == "${uid}" && last_update_date >= ${prve} && last_update_date < ${next}`) // 查询更新时间在当月范围的数据
+  const accountres = await Account
+    .where(`uid == "${uid}" && last_update_date >= ${prev} && last_update_date < ${next}`) // 查询更新时间在当月范围的数据
     .groupBy('dateToString(add(new Date(0),last_update_date),"%Y-%m-%d-%u") as date') // 分组字段
     .groupField(
       `count(*) as total,
@@ -41,17 +66,30 @@ module.exports.get = async ctx => {
     .orderBy('date', 'desc')
     .get();
 
-  res.data.forEach(item => {
-    item.expenditure = item.list.map(v => v.account_type == 0 ? v.money : 0).reduce((prev, cur) => prev + cur,
-      0) // 支出
-    item.income = item.list.map(v => v.account_type == 1 ? v.money : 0).reduce((prev, cur) => prev + cur,
-      0) // 收入
+  const budgetres = await Budget
+    .where(
+      `uid == "${uid}" && budget_type == "all" && create_date >= ${prev} && create_date < ${next}`
+    ) // 查询创建时间在当月范围的数据
+    .field('money')
+    .get();
+
+  accountres.data.forEach(item => {
+    item.expenditure = item.list.map(v => v.account_type == 0 ? v.money : 0).reduce((prev, cur) => evaluate(
+      `${prev}+${cur}`), 0) // 支出
+    item.income = item.list.map(v => v.account_type == 1 ? v.money : 0).reduce((prev, cur) => evaluate(
+      `${prev}+${cur}`), 0) // 收入
     accountDate.expenditure += item.expenditure // 总支出
     accountDate.income += item.income // 总收入
+    item.expenditure = item.expenditure.toFixed(2)
+    item.income = item.income.toFixed(2)
     item.list.sort((a, b) => b.last_update_date - a.last_update_date) // 单个分组数据倒序
   })
 
-  accountDate.groupList = res.data
+  accountDate.expenditure = accountDate.expenditure.toFixed(2)
+  accountDate.income = accountDate.income.toFixed(2)
+  accountDate.groupList = accountres.data
+  accountDate.budget = calcBudget(budgetres.data[0] && budgetres.data[0].money, accountDate.expenditure, accountDate
+    .groupList[0])
 
   return accountDate;
 }

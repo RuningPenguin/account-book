@@ -2,7 +2,9 @@
 import {defineStore} from "pinia";
 import {reactive} from "vue";
 import useStorage from "@/tools/storage";
-import type {Userinfo, UserState, UserStore} from "@/types/store/user";
+import type {UserState, UserStore} from "@/types/store/user";
+import {getUserInfoApi} from "@/apis/user";
+import type {UserInfo} from "@/types/api/user";
 
 const storage = useStorage();
 
@@ -13,18 +15,25 @@ const useUserStore = defineStore("user", (): UserStore => {
 		token: storage.get("token") || ""
 	});
 	
-	const setUserinfo = (obj: Userinfo) => {
-		storage.set("userinfo", obj);
-		state.userinfo = obj;
+	const setUserinfo = (userinfo: UserInfo) => {
+		storage.set("userinfo", userinfo);
+		state.userinfo = userinfo;
 	};
 	
-	const setToken = (str?: string) => {
-		const token =  str || storage.get("uni_id_token")
+	const setToken = (token?: string) => {
+		token = token || storage.get("uni_id_token");
 		storage.set("token", token);
 		state.token = token;
 	};
 	
-	return {state, setUserinfo, setToken};
+	const getUserinfo = () => {
+		getUserInfoApi().then((res: UserInfo) => {
+			setUserinfo(res)
+			setToken()
+		})
+	}
+	
+	return {state, setUserinfo, setToken, getUserinfo};
 }, {persist: {enabled: true}});
 
 export default useUserStore;

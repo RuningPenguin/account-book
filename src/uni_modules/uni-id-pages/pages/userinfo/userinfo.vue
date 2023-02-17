@@ -32,11 +32,14 @@
 	</view>
 </template>
 <script>
-	const uniIdCo = uniCloud.importObject("uni-id-co")
+	import useUserStore from "../../../../store/user";
+
+  const uniIdCo = uniCloud.importObject("uni-id-co")
 	import {
 		store,
 		mutations
 	} from '@/uni_modules/uni-id-pages/common/store.js'
+  const {getUserinfo} = useUserStore();
 	export default {
 		computed: {
 			userInfo() {
@@ -88,6 +91,7 @@
 			},
 			bindMobileSuccess() {
 				mutations.updateUserInfo()
+        getUserinfo()
 			},
 			changePassword() {
 				uni.navigateTo({
@@ -126,6 +130,7 @@
 					success: async e => {
 						uniIdCo.bindMobileByUniverify(e.authResult).then(res => {
 							mutations.updateUserInfo()
+              getUserinfo()
 						}).catch(e => {
 							console.log(e);
 						}).finally(e => {
@@ -151,6 +156,7 @@
 					mutations.updateUserInfo({
 						nickname
 					})
+          getUserinfo()
 					this.setNicknameIng = false
 					this.$refs.dialog.close()
 				} else {
@@ -175,6 +181,7 @@
 				if (this.userInfo[bindField]) {
 					await uniIdCo['unbind' + provider]()
 					await mutations.updateUserInfo()
+          getUserinfo()
 				} else {
 					uni.login({
 						provider: provider.toLowerCase(),
@@ -190,6 +197,7 @@
 								})
 							}
 							await mutations.updateUserInfo()
+              getUserinfo()
 						},
 						fail: async (err) => {
 							console.log(err);
