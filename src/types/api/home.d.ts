@@ -2,6 +2,7 @@ export type AccountList = {
 	income: string; // 收入金额总数
 	expenditure: string; // 支出金额总数
 	budget: {
+		isToday: boolean; // 最近一条记录是否是今天
 		day: string; // 每日预算
 		month: string; // 月预算
 		everyDay: string; // 每日可支配预算

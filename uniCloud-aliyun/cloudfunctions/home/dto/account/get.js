@@ -1,6 +1,6 @@
 const { log } = require("console");
-const { isFlag } = require("../../utils/index.js")
-
+const { isFlag, createTimeSection } = require("../../utils/index.js")
+const { dateFormat } = require("../../utils/format.js")
 const { evaluate } = require('../../lib/math.js')
 
 // 参数验证
@@ -13,20 +13,18 @@ function dataVerification(data) {
   return { year, month }
 }
 
-// 获取时间区间
-function createTimeSection(year, month) {
-  const prev = Date.parse(`${year}-${month}-01 00:00:00`);
-  const next = Date.parse(`${year}-${Number(month) + 1}-01 00:00:00`);
-  return [Number(prev), Number(next)]
-}
-
 // 计算预算
-function calcBudget(money, expenditure) {
-  const obj = { day: "0", month: "0", everyDay: "0" }
+function calcBudget(money, expenditure, item = {}) {
+  const obj = { day: 0, month: 0, everyDay: 0, isToday: false }
   if (!isFlag(money)) return obj
+
+  const [y, m, d] = (item.date || '').split('-')
 
   const days = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
 
+  const [prev, next, timeStamp] = createTimeSection(y, m, d, 'd');
+
+  obj.isToday = item.date ? (timeStamp >= prev && timeStamp < next) : false;
   obj.month = money.toFixed(2)
   obj.day = evaluate(`${money} / ${days}`).toFixed(2);
   obj.everyDay = evaluate(`(${money} - ${expenditure}) / (${days} - ${new Date().getDate()})`).toFixed(2);
@@ -41,7 +39,17 @@ module.exports.get = async ctx => {
   const [prev, next] = createTimeSection(year, month);
 
   // 返回数据
-  const accountDate = { expenditure: 0, income: 0, groupList: [], budget: { day: 0, month: 0, everyDay: 0 } }
+  const accountDate = {
+    expenditure: 0,
+    income: 0,
+    groupList: [],
+    budget: {
+      day: 0,
+      month: 0,
+      everyDay: 0,
+      isToday: false
+    }
+  }
 
   // jql 操作数据库
   const dbJQL = uniCloud.databaseForJQL({ event, context });
@@ -80,7 +88,8 @@ module.exports.get = async ctx => {
   accountDate.expenditure = accountDate.expenditure.toFixed(2)
   accountDate.income = accountDate.income.toFixed(2)
   accountDate.groupList = accountres.data
-  accountDate.budget = calcBudget(budgetres.data[0] && budgetres.data[0].money, accountDate.expenditure)
+  accountDate.budget = calcBudget(budgetres.data[0] && budgetres.data[0].money, accountDate.expenditure, accountDate
+    .groupList[0])
 
   return accountDate;
 }

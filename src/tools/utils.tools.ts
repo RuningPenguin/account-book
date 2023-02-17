@@ -8,6 +8,12 @@ export const isFlag = function (val: any): boolean {
 	}
 }
 
+// 获取时间区间
+export function createTimeSection(year: number = new Date().getFullYear(), month: number = new Date().getMonth() + 1): [number, number] {
+	const prev = Date.parse(`${year}-${month}-01 00:00:00`);
+	const next = Date.parse(`${year}-${Number(month) + 1}-01 00:00:00`);
+	return [Number(prev), Number(next)]
+}
 
 // 复制
 export const copy = (str: string) => {

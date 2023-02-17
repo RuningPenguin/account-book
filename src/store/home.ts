@@ -49,8 +49,8 @@ const useHomeStore = defineStore("home", (): HomeStore => {
 				...{
 					overBudget: Number(res.expenditure) > Number(res.budget.month),
 					monthS: evaluate(`${state.budgetDate.month}-${res.expenditure}`).toFixed(2) || 0,
-					dayS: evaluate(`${state.budgetDate.day}-${state.list[0]?.expenditure || 0}`).toFixed(2) || 0,
-					dayP: perc1to2(state.list[0]?.expenditure || 0, state.budgetDate.day) || 0,
+					dayS: evaluate(`${state.budgetDate.day}-${state.budgetDate.isToday ? state.list[0].expenditure : 0}`).toFixed(2) || 0,
+					dayP: perc1to2(state.budgetDate.isToday ? state.list[0].expenditure : 0, state.budgetDate.day) || 0,
 					monthP: perc1to2(res.expenditure, state.budgetDate.month) || 0
 				}
 			}

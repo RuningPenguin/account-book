@@ -1,13 +1,7 @@
 const { Service } = require("uni-cloud-router");
 const { create, update } = require("../../dto/budget/add.js")
 const { log } = require("console");
-
-// 获取时间区间
-function createTimeSection() {
-  const prev = Date.parse(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-01 00:00:00`);
-  const next = Date.parse(`$${new Date().getFullYear()}-${new Date().getMonth() + 2}-01 00:00:00`);
-  return [Number(prev), Number(next)]
-}
+const { createTimeSection } = require("../../utils/index.js")
 
 module.exports = class AddService extends Service {
   // 添加一条预算
