@@ -1,5 +1,5 @@
 <template>
-  <u-index-list v-if="h > 0" :custom-nav-height="h">
+  <u-index-list v-if="customNavHeight > 0" :custom-nav-height="customNavHeight">
     <template v-for="(item, index) in list" :key="index">
       <qie-index-anchor
           class="index_anchor"
@@ -56,15 +56,6 @@ const props = defineProps({
     }
   },
 });
-
-const {customNavHeight} = toRefs(props)
-
-let h = ref(0)
-watch(customNavHeight, (a) => {
-  h.value = a
-  console.log(h.value,a,2)
-}, {immediate: true})
-
 
 // 获取默认值
 const getDefaultRemark = (item: any): string | undefined => {

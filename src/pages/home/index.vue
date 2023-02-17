@@ -58,7 +58,7 @@ const setExpenditure = async (money: number) => {
 
 onMounted(async () => {
   await getAccountList();
-  const {height}: anyObj = await getElement('.data_box',false,instance);
+  const {height}: anyObj = await getElement('.data_box', false, instance);
   customNavHeight.value = height;
 });
 </script>
