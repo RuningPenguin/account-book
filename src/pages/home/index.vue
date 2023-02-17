@@ -15,8 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ComputedRef, ref, toRefs} from 'vue';
-import {onLoad} from '@dcloudio/uni-app';
+import {computed, ComputedRef, getCurrentInstance, onMounted, ref, toRefs} from 'vue';
 import {getElement} from '@/tools/element.tools';
 import Top from "@/pages/home/components/top.vue";
 import Budget from './components/budget.vue';
@@ -24,6 +23,7 @@ import List from './components/list.vue';
 import useHomeStore from "@/store/home";
 import {createBudgetApi} from "@/apis/home";
 
+const instance = getCurrentInstance()
 const {state, getAccountList, reloadList} = useHomeStore();
 const {accountParams, list, status, allMoney, budgetDate} = toRefs(state);
 
@@ -56,11 +56,10 @@ const setExpenditure = async (money: number) => {
   reloadList();
 };
 
-onLoad(async () => {
-  const {height}: anyObj = await getElement('.data_box');
+onMounted(async () => {
+  await getAccountList();
+  const {height}: anyObj = await getElement('.data_box',false,instance);
   customNavHeight.value = height;
-
-  getAccountList();
 });
 </script>
 

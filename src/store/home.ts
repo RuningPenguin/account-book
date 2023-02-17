@@ -35,27 +35,27 @@ const useHomeStore = defineStore("home", (): HomeStore => {
 	
 	
 	// 获取账单数据
-	const getAccountList = () => {
+	const getAccountList = async () => {
 		// state.status = 'loading'
-		getAccountListApi(state.accountParams).then((res: AccountList) => {
-			// state.status = 'loadmore'
-			state.allMoney.expenditure = res.expenditure
-			state.allMoney.income = res.income
-			state.budgetDate = res.budget
-			state.list = [...state.list, ...res.groupList]
-			// 计算百分比
-			state.budgetDate = {
-				...state.budgetDate,
-				...{
-					overBudget: Number(res.expenditure) > Number(res.budget.month),
-					monthS: evaluate(`${state.budgetDate.month}-${res.expenditure}`).toFixed(2) || 0,
-					dayS: evaluate(`${state.budgetDate.day}-${state.budgetDate.isToday ? state.list[0].expenditure : 0}`).toFixed(2) || 0,
-					dayP: perc1to2(state.budgetDate.isToday ? state.list[0].expenditure : 0, state.budgetDate.day) || 0,
-					monthP: perc1to2(res.expenditure, state.budgetDate.month) || 0
-				}
+		const res: AccountList = await getAccountListApi(state.accountParams);
+		// state.status = 'loadmore'
+		state.allMoney.expenditure = res.expenditure
+		state.allMoney.income = res.income
+		// state.budgetDate = res.budget
+		state.list = [...state.list, ...res.groupList]
+		// 计算百分比
+		state.budgetDate = {
+			// ...state.budgetDate,
+			...res.budget,
+			...{
+				overBudget: Number(res.expenditure) > Number(res.budget.month),
+				monthS: evaluate(`${res.budget.month}-${res.expenditure}`).toFixed(2) || '0',
+				dayS: evaluate(`${res.budget.day}-${res.budget.isToday ? state.list[0].expenditure : '0'}`).toFixed(2) || '0',
+				dayP: String(perc1to2(res.budget.isToday ? state.list[0].expenditure : '0', res.budget.day)) || '0',
+				monthP: String(perc1to2(res.expenditure, res.budget.month)) || '0'
 			}
-			// state.status = 'nomore'
-		})
+		}
+		// state.status = 'nomore'
 	}
 	
 	// 修改参数

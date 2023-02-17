@@ -1,5 +1,5 @@
 <template>
-  <u-index-list v-if="customNavHeight > 0" :custom-nav-height="customNavHeight">
+  <u-index-list v-if="h > 0" :custom-nav-height="h">
     <template v-for="(item, index) in list" :key="index">
       <qie-index-anchor
           class="index_anchor"
@@ -45,15 +45,25 @@
 <script lang="ts" setup>
 import billType from "@/config/billType";
 import {formatWeek} from "@/tools/format.tools";
+import {ref, toRefs, watch} from "vue";
 
 const props = defineProps({
   status: {required: true, type: String, default: 'loadmore'},
   customNavHeight: {required: true, type: Number, default: 0},
   list: {required: true, type: Array, default: () => []},
   loadmore: {
-    type: Function, default: () => {}
+    type: Function, default: () => {
+    }
   },
 });
+
+const {customNavHeight} = toRefs(props)
+
+let h = ref(0)
+watch(customNavHeight, (a) => {
+  h.value = a
+  console.log(h.value,a,2)
+}, {immediate: true})
 
 
 // 获取默认值

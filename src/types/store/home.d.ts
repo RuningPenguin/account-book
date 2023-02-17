@@ -18,7 +18,7 @@ export type HomeState = {
 		month: string; // 月预算
 		everyDay: string; // 每日可支配预算
 		dayP: string; // 每日可支配预算百分比
-		monP: string; // 每日可支配预算百分比
+		monthP: string; // 每日可支配预算百分比
 		overBudget: boolean; // 是否超预算
 		monthS: string; // 月剩余
 		dayS: string; // 日剩余

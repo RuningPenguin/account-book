@@ -9,6 +9,6 @@ export const formatWeek = (index: string | number): string => {
 
 
 // 获取前一个数字在后一个数字占比
-export const perc1to2 = (num1: number, num2: number): number => {
+export const perc1to2 = (num1: number|string, num2: number|string): number => {
 	return evaluate(`${Number(num1) || 0}/${Number(num2) || 0}`).toFixed(2) * 100;
 }
