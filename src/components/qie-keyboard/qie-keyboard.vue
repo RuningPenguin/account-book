@@ -93,6 +93,8 @@
 <script lang="ts" setup>
 import mixin from '@/components/mixin.js';
 import { computed, ref, watch } from "vue";
+import floatObj from "@/components/floatObj.js"
+// import * as console from "console";
 
 /**
  * keyboard 键盘组件
@@ -156,6 +158,9 @@ const timer = ref<any>(null)
 const openShow = ref<any>(false)
 const date = ref<string|null>(null)
 const inputValue = ref<string|null|number>(null)
+const _resolve = ref<any>(null)
+const _reject = ref<any>(null)
+const first = ref<any>(true)
 const numList = computed(() => {
 	let list = [1, 2, 3, 4, 5, 6, 7, 8, 9, '',0]
 	if (props.mode === 'card') {
@@ -195,13 +200,26 @@ watch(openShow.value,(v) => {
 })
 const emits = defineEmits()
 const open = (option:any) => {
-	date.value = option.date
-	inputValue.value = Number(option.value)
-	console.log('option',option)
-	openShow.value = true
+	return new Promise((resolve, reject) => {
+		_resolve.value = resolve
+		_reject.value = reject
+		inputValue.value = Number(option.value)
+		openShow.value = true
+		first.value = true
+		console.log('option',option,_resolve.value)
+		if (option.date) {
+			date.value = option.date
+		}
+	})
 }
 const onKeyTap = (key: any) => {
 	let value = inputValue.value.toString()
+	if (key !== '-' && key !== '+' && first.value) {
+		inputValue.value = key
+		first.value = false
+		return
+	}
+	first.value = false
 	if (key === 'del') {
 		if (value.length) {
 			inputValue.value = value.substr(0, value.length - 1) || 0
@@ -220,7 +238,40 @@ const onKeyTap = (key: any) => {
 
 const onConfirm = () => {
 	if (inputValue.value) {
+		let value = inputValue.value.toString()
+		if (value.includes('-')) {
+			const list = value.split('-') || []
+			const index = value.split('').findIndex(item => item==='-')
+			if (index === value.length - 1) {
+				inputValue.value = Number(list[0])
+			} else {
+				inputValue.value = Number(list[0])
+				list.slice(1,list.length).forEach(item => {
+					inputValue.value = floatObj.subtract(Number(inputValue.value),Number(item))
+				})
+				inputValue.value = Math.abs(inputValue.value)
+			}
+		} else if (value.includes('+')) {
+			const list = value.split('+') || []
+			const index = value.split('').findIndex(item => item==='+')
+			if (index === value.length - 1) {
+				inputValue.value = Number(list[0])
+			} else {
+				inputValue.value = Number(list[0])
+				list.slice(1,list.length).forEach(item => {
+					inputValue.value = floatObj.add(Number(inputValue.value),Number(item))
+				})
+				inputValue.value = Math.abs(inputValue.value)
+			}
+		} else {
+			inputValue.value = Number(value)
+		}
 		emits('change', inputValue.value)
+		if (_resolve.value) {
+			_resolve.value(inputValue.value)
+			_resolve.value = null
+			_reject.value = null
+		}
 		openShow.value = false
 	}
 }

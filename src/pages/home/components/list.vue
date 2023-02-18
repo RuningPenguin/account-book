@@ -31,7 +31,7 @@
                 :style="item.list.length - 1 === idx ? 'border: none' : ''"
             >
               <div>{{ val.remark || getDefaultRemark(val) }}</div>
-              <div @click="showKeyboard(item,val)">{{ !!val.account_type ? '+' : '-' }} {{ val.money }}</div>
+              <div @click="showKeyboard('money',item,val)">{{ !!val.account_type ? '+' : '-' }} {{ val.money }}</div>
             </div>
           </div>
         </view>
@@ -81,15 +81,18 @@ const getAllMoney = (list: any): number => {
 }
 
 const numRef = ref<InstanceType<typeof QieKeyboard>>()
-const showKeyboard = (item: any,val: any) => {
+const showKeyboard = async (filed, item: any,val: any) => {
 	const date = item.date.split('-') || []
-	numRef.value.open({
+	const num = await numRef.value.open({
 		date: date.length>0 ? date[0] + '/' + date[1] + '/' + date[2] : null,
 		value: val.money
 	})
+	val[filed] = num
+
+	console.log('aa',num, val)
 }
 const keyBoardChange = async (item: any) => {
-
+	console.log('bb', item)
 }
 
 </script>
