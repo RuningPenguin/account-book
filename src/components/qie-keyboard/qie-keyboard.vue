@@ -94,7 +94,7 @@
 import mixin from '@/components/mixin.js';
 import { computed, ref, watch } from "vue";
 import floatObj from "@/components/floatObj.js"
-// import * as console from "console";
+import { re } from "mathjs";
 
 /**
  * keyboard 键盘组件
@@ -214,26 +214,73 @@ const open = (option:any) => {
 }
 const onKeyTap = (key: any) => {
 	let value = inputValue.value.toString()
-	if (key !== '-' && key !== '+' && first.value) {
-		inputValue.value = key
+	//正则验证纯数字
+	const numTest = new RegExp(/^[0-9]*$/)
+	if (first.value) {
 		first.value = false
-		return
-	}
-	first.value = false
-	if (key === 'del') {
-		if (value.length) {
-			inputValue.value = value.substr(0, value.length - 1) || 0
-		}
-		return
-	} else if(key === '.'){
-		if (value.indexOf('.') !== -1) {
+		if (numTest.test(key)) {
+			inputValue.value = key
 			return
+		} else {
+			if (value.indexOf('.') >= 0 && key !== '-' && key !== '+') {
+				inputValue.value = '0.'
+				return
+			}
 		}
-	}
-	if (key !== '.' && value.indexOf('.') === -1 && value.startsWith('0')) {
-		value = value.substr(1, value.length)
+	} else {
+		if (key === 'del') {
+			if (value.length) {
+				inputValue.value = value.substr(0, value.length - 1) || 0
+			}
+			return
+		} else if(key === '.') {
+			if (value.indexOf('-') === -1&&value.indexOf('+') === -1) {
+				if (value.indexOf('.') !== -1 || value === '') {
+					return
+				}
+			} else if (value.indexOf('-') !== -1 || value.indexOf('+') !== -1) {
+				const [a,b] = value.split('-')
+				const [c,d] = value.split('+')
+				if (b === '' || d === '') {
+					inputValue.value = value + '0.'
+					return
+				} else if (b?.indexOf('.') !== -1||d?.indexOf('.') !== -1) {
+					return
+				}
+			}
+		} else if(key === '+') {
+			if (value.indexOf('-') >= 0) {
+				inputValue.value = value.split('-')[0] + key
+				return
+			} else if (value.indexOf('+') >= 0) {
+				const [a,b] = value.split('+')
+				if (b !== '') {
+					inputValue.value = floatObj.add(Number(a),Number(b)) + key
+					return
+				} else {
+					return
+				}
+			}
+		} else if(key === '-') {
+			if (value.indexOf('+') >= 0) {
+				inputValue.value = value.split('+')[0] + key
+				return
+			} else if (value.indexOf('-') >= 0) {
+				const [a,b] = value.split('-')
+				if (b !== '') {
+					inputValue.value = floatObj.add(Number(a),Number(b)) + key
+					return
+				} else {
+					return
+				}
+			}
+		}
+		if (key !== '.' && value.indexOf('.') === -1 && value.startsWith('0')) {
+			value = value.substr(1, value.length)
+		}
 	}
 	inputValue.value = value + key
+
 }
 
 const onConfirm = () => {
