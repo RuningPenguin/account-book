@@ -213,7 +213,7 @@ const open = (option:any) => {
 	})
 }
 const onKeyTap = (key: any) => {
-	let value = inputValue.value.toString()
+	let value = inputValue.value?.toString() || ''
 	//正则验证纯数字
 	const numTest = new RegExp(/^[0-9]*$/)
 	if (first.value) {
@@ -241,10 +241,10 @@ const onKeyTap = (key: any) => {
 			} else if (value.indexOf('-') !== -1 || value.indexOf('+') !== -1) {
 				const [a,b] = value.split('-')
 				const [c,d] = value.split('+')
-				if (b === '' || d === '') {
+				if (b === '' && d === '') {
 					inputValue.value = value + '0.'
 					return
-				} else if (b?.indexOf('.') !== -1||d?.indexOf('.') !== -1) {
+				} else if (b?.indexOf('.') !== -1&&d?.indexOf('.') !== -1) {
 					return
 				}
 			}
